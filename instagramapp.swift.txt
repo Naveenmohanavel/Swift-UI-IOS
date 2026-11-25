@@ -1,0 +1,294 @@
+swift program for Instagram app:
+
+
+import SwiftUI
+
+struct ContentView: View {
+
+    @State private var email = ""
+    @State private var password = ""
+    @State private var isLoggedIn = false
+
+    var body: some View {
+
+        if isLoggedIn {
+            HomeView()
+        } else {
+
+            VStack(spacing: 25) {
+
+                Spacer()
+
+                Text("Instagram Style")
+                    .font(.largeTitle)
+                    .bold()
+
+                TextField("Email or Username", text: $email)
+                    .textFieldStyle(.roundedBorder)
+
+                SecureField("Password", text: $password)
+                    .textFieldStyle(.roundedBorder)
+
+                Button("Log In") {
+                    if !email.isEmpty && !password.isEmpty {
+                        isLoggedIn = true
+                    }
+                }
+                .foregroundColor(.white)
+                .frame(maxWidth: .infinity)
+                .padding()
+                .background(.pink)
+                .cornerRadius(10)
+
+                Spacer()
+            }
+            .padding(30)
+        }
+    }
+}
+
+// HOME PAGE
+
+struct HomeView: View {
+
+    @State private var selectedTab = 0
+    @State private var liked = false
+
+    var body: some View {
+
+        VStack {
+
+            HStack {
+                Text("Instagram")
+                    .font(.largeTitle)
+                    .bold()
+
+                Spacer()
+
+                Image(systemName: "heart")
+                    .font(.title2)
+
+                Image(systemName: "paperplane")
+                    .font(.title2)
+            }
+            .padding()
+
+            if selectedTab == 0 {
+
+                ScrollView {
+
+                    HStack {
+                        ForEach(1...5, id: \.self) { number in
+
+                            VStack {
+                                Circle()
+                                    .fill(.pink.opacity(0.3))
+                                    .frame(width: 60, height: 60)
+                                    .overlay {
+                                        Image(systemName: "person.fill")
+                                    }
+
+                                Text("User \(number)")
+                                    .font(.caption)
+                            }
+                        }
+                    }
+
+                    Divider()
+                        .padding(.vertical)
+
+                    VStack(alignment: .leading) {
+
+                        HStack {
+                            Image(systemName: "person.circle.fill")
+                                .font(.largeTitle)
+
+                            Text("naveen_user")
+                                .bold()
+
+                            Spacer()
+
+                            Image(systemName: "ellipsis")
+                        }
+                        .padding(.horizontal)
+
+                        Rectangle()
+                            .fill(.purple.opacity(0.2))
+                            .frame(height: 300)
+                            .overlay {
+                                Image(systemName: "photo")
+                                    .font(.system(size: 60))
+                                    .foregroundColor(.purple)
+                            }
+
+                        HStack {
+
+                            Button {
+                                liked.toggle()
+                            } label: {
+                                Image(systemName:
+                                    liked ? "heart.fill" : "heart")
+                                    .foregroundColor(
+                                        liked ? .red : .primary
+                                    )
+                            }
+
+                            Image(systemName: "bubble.right")
+                            Image(systemName: "paperplane")
+
+                            Spacer()
+
+                            Image(systemName: "bookmark")
+                        }
+                        .font(.title2)
+                        .padding(.horizontal)
+
+                        Text(liked ? "Liked" : "Like this post")
+                            .bold()
+                            .padding(.horizontal)
+                    }
+                }
+
+            } else if selectedTab == 1 {
+
+                ExploreView()
+
+            } else if selectedTab == 2 {
+
+                ReelsView()
+
+            } else {
+
+                ProfileView()
+            }
+
+            Spacer()
+
+            HStack {
+
+                tabButton("house.fill", index: 0)
+                Spacer()
+
+                tabButton("magnifyingglass", index: 1)
+                Spacer()
+
+                tabButton("play.rectangle", index: 2)
+                Spacer()
+
+                tabButton("person.circle", index: 3)
+            }
+            .font(.title2)
+            .padding()
+        }
+    }
+
+    func tabButton(_ icon: String, index: Int) -> some View {
+
+        Button {
+            selectedTab = index
+        } label: {
+
+            Image(systemName: icon)
+                .foregroundColor(
+                    selectedTab == index ? .pink : .primary
+                )
+        }
+    }
+}
+
+// EXPLORE PAGE
+
+struct ExploreView: View {
+
+    var body: some View {
+
+        VStack {
+
+            Text("Explore")
+                .font(.largeTitle)
+                .bold()
+
+            TextField("Search", text: .constant(""))
+                .textFieldStyle(.roundedBorder)
+                .padding()
+
+            Image(systemName: "photo.on.rectangle.angled")
+                .font(.system(size: 80))
+                .foregroundColor(.gray)
+
+            Text("Discover new content")
+        }
+    }
+}
+
+// REELS PAGE
+
+struct ReelsView: View {
+
+    var body: some View {
+
+        VStack {
+
+            Text("Reels")
+                .font(.largeTitle)
+                .bold()
+
+            Spacer()
+
+            Image(systemName: "play.rectangle.fill")
+                .font(.system(size: 100))
+                .foregroundColor(.pink)
+
+            Text("Your Reels will appear here")
+
+            Spacer()
+        }
+    }
+}
+
+// PROFILE PAGE
+
+struct ProfileView: View {
+
+    var body: some View {
+
+        VStack {
+
+            Image(systemName: "person.circle.fill")
+                .font(.system(size: 100))
+                .foregroundColor(.pink)
+
+            Text("naveen_user")
+                .font(.title)
+                .bold()
+
+            HStack(spacing: 40) {
+
+                VStack {
+                    Text("12").bold()
+                    Text("Posts")
+                }
+
+                VStack {
+                    Text("250").bold()
+                    Text("Followers")
+                }
+
+                VStack {
+                    Text("180").bold()
+                    Text("Following")
+                }
+            }
+            .padding()
+
+            Spacer()
+        }
+    }
+}
+
+#Preview {
+    ContentView()
+}
+
+
+
